@@ -28,7 +28,7 @@ const LoginFormOrganizer = () => {
       }
       setTimeout(() => {
         isLoading(false);
-        navigate("/create-event");
+        navigate("/chat");
       }, 2000);
     } catch (err) {
       isLoading(false);
@@ -45,6 +45,7 @@ const LoginFormOrganizer = () => {
       }
     }
   };
+
   return (
     <div>
       {loading ? (

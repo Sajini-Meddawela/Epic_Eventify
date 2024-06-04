@@ -1,35 +1,9 @@
 import React from "react";
-import logo from "../Components/Assets/logoHeader.png";
-import axios from "axios";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import logo from "../Components/Assets/logoHeader.png";
+import Logout from "../pages/Logout";
 
 const HeaderAuthenticate = () => {
-  const navigate = useNavigate();
-  const logout = async () => {
-    try {
-      const res = await axios.get("http://localhost:3001/api/v1/auth/logout");
-      console.log(res);
-
-      localStorage.removeItem("jsonwebtoken");
-      localStorage.removeItem("role");
-      Swal.fire({
-        icon: "success",
-        title: "",
-        text: "Successfully LoggedOut!!",
-      });
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      // Show error message
-      Swal.fire({
-        icon: "error",
-        title: "Logout Failed",
-        text: "An error occurred while logging out. Please try again.",
-      });
-    }
-  };
   return (
     <div>
       <nav
@@ -39,7 +13,7 @@ const HeaderAuthenticate = () => {
         <div className="flex w-full items-center px-3">
           <div>
             <Link to={"/"}>
-              <img src={logo} alt="" className="max-h-[30px] ml-5" />
+              <img src={logo} alt="Logo" className="max-h-[30px] ml-5" />
             </Link>
           </div>
           <div className="text-white ml-16">
@@ -50,8 +24,8 @@ const HeaderAuthenticate = () => {
               <li className="mx-4">About</li>
             </ul>
           </div>
-          <div className="text-white flex justify-end ml-auto mr-5">
-            <button onClick={logout}>Logout</button>
+          <div className="flex justify-end ml-auto mr-5">
+            <Logout />
           </div>
         </div>
       </nav>

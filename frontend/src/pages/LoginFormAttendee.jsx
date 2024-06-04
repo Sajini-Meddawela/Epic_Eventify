@@ -28,7 +28,7 @@ const LoginFormAttendee = () => {
 
       setTimeout(() => {
         isLoading(false);
-        navigate("/attendee-dashboard");
+        navigate("/chat");
       }, 2000);
     } catch (err) {
       isLoading(false);
@@ -43,6 +43,7 @@ const LoginFormAttendee = () => {
       }
     }
   };
+  
   return (
     <div>
       {loading ? (
