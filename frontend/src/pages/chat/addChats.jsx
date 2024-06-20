@@ -12,6 +12,7 @@ const AddChats = () => {
   const onFinish = async (values) => {
     setLoading(true);
     const token = localStorage.getItem("jsonwebtoken");
+    const creatorEmail = localStorage.getItem("userEmail");
 
     const headers = {
       Authorization: `Bearer ${token}`,
@@ -21,21 +22,36 @@ const AddChats = () => {
       const response = await uploadFileToFirebase(file);
       uploadImg = response;
     }
-    const chatName = values.username;
+
+    const chatData = {
+      chatImg: uploadImg,
+      chatName: values.username,
+      creator: creatorEmail, 
+      createdDate: new Date().toISOString().split('T')[0] // Ensure it's in YYYY-MM-DD format
+    };
+
     try {
       const res = await axios.post(
         "http://localhost:3001/api/v1/chat/",
-        { chatImg: uploadImg, chatName: chatName },
-        {
-          headers,
-        }
+        { chatData },
+        { headers }
       );
-      console.log("Response:", res.data);
+      console.log("Response:", res.data);  /*if (!uploadImg || typeof uploadImg !== 'string') {
+                                             setLoading(false);
+                                             console.error("chatImg is invalid or cannot be null");
+                                             return;
+                                           }*/           
       setLoading(false);
       navigate("/chat");
     } catch (error) {
       setLoading(false);
-      console.error("Error:", error);
+      if (error.response) {
+        console.error("Error:", error.response.data);
+      } else if (error.request) {
+        console.error("Error: No response received from server");
+      } else {
+        console.error("Error:", error.message);
+      }
     }
   };
 

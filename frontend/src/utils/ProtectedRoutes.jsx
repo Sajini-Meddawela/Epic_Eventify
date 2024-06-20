@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, roles }) => {
 
   // Check if the user's role is allowed
   if (roles && !roles.includes(userRole)) {
-    return <Navigate to="/unauthorized" />; // or any other unauthorized page
+    return <Navigate to="/unauthorized" />;
   }
 
   // If authenticated and authorized, render the child component

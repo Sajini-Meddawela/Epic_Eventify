@@ -22,8 +22,10 @@ const LoginFormAttendee = () => {
       if (res.data.status === "success") {
         const token = res.data.token;
         const role = res.data.role;
+        const userEmail = res.data.userEmail
         localStorage.setItem("jsonwebtoken", token);
         localStorage.setItem("role", role);
+        localStorage.setItem("userEmail", userEmail);
       }
 
       setTimeout(() => {

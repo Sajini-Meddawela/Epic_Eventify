@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import HeaderAuthenticate from "../../Layouts/HeaderAuthenticated";
 import Footer from "../../Layouts/Footer";
 import { Divider } from "antd";
@@ -8,17 +9,40 @@ import Swal from "sweetalert2";
 import Loader from "../../Components/common/Loader";
 
 const ChatWindow = () => {
-  const [loading, isLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [chats, setChats] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [selectedChat, setSelectedChat] = useState(null);
   const [isOrganizer, setIsOrganizer] = useState(false);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jsonwebtoken");
+
+    // Connect to WebSocket server
+    const newSocket = io("http://localhost:3001", {
+      query: { token }
+    });
+    setSocket(newSocket);
+
+    return () => newSocket.close();
+  }, [setSocket]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("receiveMessage", (message) => {
+        if (message.chatId === selectedChat?.id) {
+          setMessages((prevMessages) => [...prevMessages, message]);
+        }
+      });
+    }
+  }, [socket, selectedChat]);
 
   useEffect(() => {
     const getChatDetails = async () => {
       try {
-        isLoading(true);
+        setLoading(true);
         const token = localStorage.getItem("jsonwebtoken");
         const role = localStorage.getItem("role");
         if (role === "Organizer") {
@@ -31,15 +55,15 @@ const ChatWindow = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-        const chats = await axios.get("http://localhost:3001/api/v1/chat/", config);
-        setChats(chats.data);
-        setSelectedChat(chats.data[0]);
-        if (role === "Organizer") {
-          setIsOrganizer(true);
-        }
-        isLoading(false);
+
+        console.log (config);
+
+        const response = await axios.get("http://localhost:3001/api/v1/chat/", config);
+        setChats(response.data);
+        setSelectedChat(response.data[0]);
+        setLoading(false);
       } catch (error) {
-        isLoading(false);
+        setLoading(false);
         console.error("Error fetching chats:", error);
       }
     };
@@ -48,22 +72,22 @@ const ChatWindow = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedChat) {
+    if (selectedChat && socket) {
+      socket.emit("joinChat", selectedChat.id);
       const getMessages = async () => {
         try {
-          isLoading(true);
+          setLoading(true);
           const token = localStorage.getItem("jsonwebtoken");
           const config = {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           };
-          const chatId = selectedChat.id;
-          const messages = await axios.get(`http://localhost:3001/api/v1/message/${chatId}`, config);
-          setMessages(messages.data);
-          isLoading(false);
+          const response = await axios.get(`http://localhost:3001/api/v1/message/${selectedChat.id}`, config);
+          setMessages(response.data);
+          setLoading(false);
         } catch (error) {
-          isLoading(false);
+          setLoading(false);
           console.error("Error fetching messages:", error);
         }
       };
@@ -71,7 +95,7 @@ const ChatWindow = () => {
     } else {
       setMessages([]);
     }
-  }, [selectedChat]);
+  }, [selectedChat, socket]);
 
   const addMessage = async () => {
     try {

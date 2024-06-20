@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const db = require("../db");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const { response } = require("express");
 
 //email send
 const sendEmailagain = async (email) => {
@@ -175,7 +176,7 @@ const loginUser = async (email, password, type, organizerId) => {
       if (!user.confirmed) {
         throw new Error("Please Verify Your Email!");
       }
-      return createSendToken(user);
+       return createSendToken(user);
     } else {
       const error = new Error("Unauthorized");
       error.statusCode = 401;
@@ -286,18 +287,21 @@ const signToken = (email, confirmed, role) => {
 const createSendToken = (user) => {
   // Remove password from output
   user.password = undefined;
-
+  
   const token = signToken(user.email, user.confirmed, user.role);
   const role = user.role;
+  const email = user.email; 
+ 
   const cookieOptions = {
-    expires: new Date(Date.now() + 60 * 60 * 1000),
+    expires: new Date(Date.now() + 5 * 60 * 1000),
     httpOnly: true,
   };
-
-  return {
+  
+ return {
     status: "success",
     token,
     role,
+    email,
     cookieOptions,
   };
 };

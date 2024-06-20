@@ -9,7 +9,9 @@ import Loader from "../Components/common/Loader";
 const LoginFormOrganizer = () => {
   const [loading, isLoading] = useState(false);
   const navigate = useNavigate();
+
   const onFinish = async (values) => {
+   
     isLoading(true);
     try {
       const res = await axios.post("http://localhost:3001/api/v1/auth/login", {
@@ -18,19 +20,29 @@ const LoginFormOrganizer = () => {
         type: 2,
         orgId: values.id,
       });
-      console.log(res.data);
 
       if (res.data.status === "success") {
+
+        console.log(res.data)
         const token = res.data.token;
         const role = res.data.role;
+        const email = values.email; //when returning email from the backend instead of values.email it display as undefine. so for the future purposes I use frontend value as it is
+
+        console.log(email)
+
         localStorage.setItem("jsonwebtoken", token);
         localStorage.setItem("role", role);
+        localStorage.setItem("userEmail", email);  // Store userEmail in local storage
+
+       
       }
       setTimeout(() => {
         isLoading(false);
         navigate("/chat");
       }, 2000);
-    } catch (err) {
+    } 
+    
+    catch (err) {
       isLoading(false);
       const res = err.response.status === 401 || 15;
       if (err.response.data.message === "Please Verify Your Email!") {
