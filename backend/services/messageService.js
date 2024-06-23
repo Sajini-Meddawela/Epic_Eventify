@@ -1,20 +1,18 @@
-const db = require('../db');
+const messages = {}; // In-memory store for messages by chat ID
 
-const getMessages = async (chatId) => {
-  const [rows] = await db.query('SELECT * FROM messages WHERE chatId = ?', [chatId]);
-  return rows;
+const getMessagesService = (io, chatId) => {
+  return messages[chatId] || [];
 };
 
-const createMessage = async (messageData) => {
-  const { chatId, userId, message } = messageData;
-  const [result] = await db.query(
-    'INSERT INTO messages (chatId, userId, message) VALUES (?, ?, ?)',
-    [chatId, userId, message]
-  );
-  return result.insertId;
+const createMessageService = (io, messageData) => {
+  const { chatId, message } = messageData;
+  if (!messages[chatId]) {
+    messages[chatId] = [];
+  }
+  const newMessage = { id: messages[chatId].length + 1, ...messageData };
+  messages[chatId].push(newMessage);
+  io.to(chatId).emit('receiveMessage', newMessage);
+  return newMessage;
 };
 
-module.exports = {
-  getMessages,
-  createMessage,
-};
+module.exports = { getMessagesService, createMessageService };

@@ -1,29 +1,21 @@
-const messageService = require('../services/messageService');
+const { createMessageService, getMessagesService } = require('../services/messageService');
 
-const getMessages = async (req, res, next) => {
+const getMessages = (io) => (req, res, next) => {
   try {
-    const { chatId } = req.params;
-    const messages = await messageService.getMessages(chatId);
-    res.json(messages);
+    const messages = getMessagesService(io, req.params.chatId);
+    res.status(200).json(messages);
   } catch (error) {
     next(error);
   }
 };
 
-const createMessage = async (req, res, next) => {
+const createMessage = (io) => (req, res, next) => {
   try {
-    const messageData = { ...req.body, userId: req.user.id };
-    const messageId = await messageService.createMessage(messageData);
-
-    req.io.to(req.body.chatId).emit('receiveMessage', { ...messageData, id: messageId });
-
-    res.status(201).json({ messageId });
+    const newMessage = createMessageService(io, req.body);
+    res.status(201).json(newMessage);
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = {
-  getMessages,
-  createMessage,
-};
+module.exports = { getMessages, createMessage };

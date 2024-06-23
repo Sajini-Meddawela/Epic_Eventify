@@ -9,7 +9,7 @@ const AddChats = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [file, setFile] = useState("");
-  
+
   const onFinish = async (values) => {
     setLoading(true);
     const token = localStorage.getItem("jsonwebtoken");
@@ -38,10 +38,10 @@ const AddChats = () => {
     }
 
     const chatData = {
-      chatImg: uploadImg || '',
+      chatImg: uploadImg || "",
       chatName: values.username,
       creator: creatorEmail,
-      createdDate: new Date().toISOString().split('T')[0]
+      createdDate: new Date().toISOString().split("T")[0],
     };
 
     try {

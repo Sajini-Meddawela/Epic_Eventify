@@ -1,13 +1,10 @@
 const express = require('express');
-const chatController = require('../controllers/chatController');
-const { protect, restrictTo } = require('../utils/security');
+const { getChats, createChat } = require('../controllers/chatController');
 
 const router = express.Router();
 
-router.route('/')
-  .post(protect, restrictTo('Organizer'), chatController.createChat)
-  .get(protect, chatController.getChats);
-
 module.exports = (io) => {
+  router.get('/', getChats(io));
+  router.post('/', createChat(io));
   return router;
 };
