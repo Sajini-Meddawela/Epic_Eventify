@@ -56,7 +56,6 @@ const ChatWindow = () => {
           },
         };
 
-        console.log (config);
 
         const response = await axios.get("http://localhost:3001/api/v1/chat/", config);
         setChats(response.data);

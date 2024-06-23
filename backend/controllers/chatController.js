@@ -12,7 +12,7 @@ const getChats = async (req, res, next) => {
 const createChat = async (req, res, next) => {
   try {
     const chatData = req.body;
-    console.log("chatData:", chatData);
+    // console.log("chatData:", chatData);
     const newChat = await chatService.createChat(chatData);
     res.status(201).json(newChat);
   } catch (error) {

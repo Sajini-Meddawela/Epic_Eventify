@@ -23,18 +23,14 @@ const LoginFormOrganizer = () => {
 
       if (res.data.status === "success") {
 
-        console.log(res.data)
         const token = res.data.token;
         const role = res.data.role;
         const email = values.email; //when returning email from the backend instead of values.email it display as undefine. so for the future purposes I use frontend value as it is
 
-        console.log(email)
-
         localStorage.setItem("jsonwebtoken", token);
         localStorage.setItem("role", role);
-        localStorage.setItem("userEmail", email);  // Store userEmail in local storage
+        localStorage.setItem("userEmail", email);
 
-       
       }
       setTimeout(() => {
         isLoading(false);

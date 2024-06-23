@@ -9,38 +9,48 @@ const AddChats = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [file, setFile] = useState("");
+  
   const onFinish = async (values) => {
     setLoading(true);
     const token = localStorage.getItem("jsonwebtoken");
     const creatorEmail = localStorage.getItem("userEmail");
 
+    if (!creatorEmail) {
+      console.error("Creator email is required");
+      setLoading(false);
+      return;
+    }
+
     const headers = {
       Authorization: `Bearer ${token}`,
     };
+
     let uploadImg;
     if (file) {
-      const response = await uploadFileToFirebase(file);
-      uploadImg = response;
+      try {
+        const response = await uploadFileToFirebase(file);
+        uploadImg = response;
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        setLoading(false);
+        return;
+      }
     }
 
     const chatData = {
-      chatImg: uploadImg,
+      chatImg: uploadImg || '',
       chatName: values.username,
-      creator: creatorEmail, 
-      createdDate: new Date().toISOString().split('T')[0] // Ensure it's in YYYY-MM-DD format
+      creator: creatorEmail,
+      createdDate: new Date().toISOString().split('T')[0]
     };
 
     try {
       const res = await axios.post(
         "http://localhost:3001/api/v1/chat/",
-        { chatData },
+        chatData,
         { headers }
       );
-      console.log("Response:", res.data);  /*if (!uploadImg || typeof uploadImg !== 'string') {
-                                             setLoading(false);
-                                             console.error("chatImg is invalid or cannot be null");
-                                             return;
-                                           }*/           
+      console.log("Response:", res.data);
       setLoading(false);
       navigate("/chat");
     } catch (error) {

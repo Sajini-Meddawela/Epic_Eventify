@@ -15,7 +15,6 @@ const createMessage = async (req, res, next) => {
     const messageData = { ...req.body, userId: req.user.id };
     const messageId = await messageService.createMessage(messageData);
 
-    // Emit the new message to all clients in the chat room
     req.io.to(req.body.chatId).emit('receiveMessage', { ...messageData, id: messageId });
 
     res.status(201).json({ messageId });
