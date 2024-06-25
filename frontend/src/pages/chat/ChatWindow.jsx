@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loader from "../../Components/common/Loader";
 
-const ChatWindow = () => {
+  const ChatWindow = () => {
   const [loading, setLoading] = useState(true);
   const [chats, setChats] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -16,6 +16,7 @@ const ChatWindow = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [isOrganizer, setIsOrganizer] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("jsonwebtoken");
@@ -55,8 +56,8 @@ const ChatWindow = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-
-
+        
+        
         const response = await axios.get("http://localhost:3001/api/v1/chat/", config);
         setChats(response.data);
         setSelectedChat(response.data[0]);
@@ -67,8 +68,8 @@ const ChatWindow = () => {
       }
     };
 
-    getChatDetails();
-  }, []);
+      getChatDetails();
+    }, []);
 
   useEffect(() => {
     if (selectedChat && socket) {
@@ -122,6 +123,11 @@ const ChatWindow = () => {
     }
   };
 
+  const filteredChats = chats.filter(chat =>
+    chat.chatName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+
   return (
     <div>
       {loading ? (
@@ -137,18 +143,20 @@ const ChatWindow = () => {
                     type="text"
                     placeholder="Search The Event"
                     className="max-h-[70px] p-3 text-lg w-full rounded-lg"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 <div
                   style={{ maxHeight: "50vh" }}
                   className="grid mt-10 grid-rows px-16 text-white overflow-y-auto"
                 >
-                  {chats.length === 0 ? (
+                  {filteredChats.length === 0 ? (
                     <div className="text-center text-lg p-10">
                       There are No Events in the List
                     </div>
                   ) : (
-                    chats.map((chat, index) => (
+                    filteredChats.map((chat, index) => (
                       <React.Fragment key={index}>
                         <button onClick={() => setSelectedChat(chat)}>
                           <div className="grid grid-cols-3 items-center ml-16">
@@ -224,16 +232,6 @@ const ChatWindow = () => {
                     messages.map((msg, index) => (
                       <div key={index}>
                         <div className="flex sm:flex-row items-center justify-start">
-                          <img
-                            src={msg.userImg}
-                            alt=""
-                            className="rounded-full"
-                            style={{
-                              width: "70px",
-                              height: "70px",
-                              cursor: "pointer",
-                            }}
-                          />
                           <div className="grid ml-3 grid-rows items-center">
                             <span className="text-lg font-extrabold">
                               {msg.userName}
