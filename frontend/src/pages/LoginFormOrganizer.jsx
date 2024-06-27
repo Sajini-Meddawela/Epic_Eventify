@@ -34,7 +34,7 @@ const LoginFormOrganizer = () => {
       }
       setTimeout(() => {
         isLoading(false);
-        navigate("/chat");
+        navigate("/create-event");
       }, 2000);
     } 
     

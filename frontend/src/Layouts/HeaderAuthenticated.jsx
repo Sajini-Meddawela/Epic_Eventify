@@ -18,9 +18,9 @@ const HeaderAuthenticate = () => {
           </div>
           <div className="text-white ml-16">
             <ul className="list-none flex">
-              <li className="mx-4">Home</li>
+              <li className="mx-4"><Link to ="/">Home</Link></li>
               <li className="mx-4">My List</li>
-              <li className="mx-4">Chats</li>
+              <li className="mx-4"><Link to="/chat">Chat</Link></li>
               <li className="mx-4">About</li>
             </ul>
           </div>

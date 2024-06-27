@@ -11,6 +11,7 @@ import OrganizerRegistration from "./pages/OrganizerRegistration";
 import AttendeeRegistration from "./pages/AttendeeRegistration";
 import RegistrationSuccessOrganizer from "./pages/RegistrationSuccessOrganizer";
 import RegistrationSuccessAttendee from "./pages/RegistrationSuccessAttendee";
+import AttendeeDashboard from "./pages/AttendeeDashboard";
 import CreateEvent from "./pages/CreateEvent";
 import ConfirmationEmailSent from "./Components/common/ConfirmationEmailSent";
 import EmailVerifiedPage from "./Components/common/EmailVerifiedPage";
@@ -31,18 +32,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/chat"
+            path="/attendee-dashboard"
             element={
-              <ProtectedRoute roles={['Organizer', 'Attendee']}>
-                <ChatWindow />
+              <ProtectedRoute roles={['Attendee']}>
+                <AttendeeDashboard />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/add-chat"
+            path="/create-event"
             element={
               <ProtectedRoute roles={['Organizer']}>
-                <AddChats />
+                <CreateEvent />
               </ProtectedRoute>
             }
           />
@@ -54,6 +55,7 @@ function App() {
           <Route path="/registered-organizer/:id" element={<RegistrationSuccessOrganizer />} />
           <Route path="/registered-attendee/:email" element={<RegistrationSuccessAttendee />} />
           <Route path="/email-verification/:email" element={<EmailConfirmation />} />
+          <Route path="/attendee-dashboard" element={<AttendeeDashboard/>} />
           <Route path="/create-event" element={<CreateEvent />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login-attendee" element={<LoginFormAttendee />} />
@@ -67,6 +69,8 @@ function App() {
           <Route path="/recover-id" element={<RecoverOrganizerId />} />
           <Route path="/organizer-recovered" element={<OrganizerRecovered />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/chat" element={<ChatWindow/>}/>
+          <Route path="/add-chat" element={<AddChats/>}/>
         </Routes>
       </BrowserRouter>
     </div>

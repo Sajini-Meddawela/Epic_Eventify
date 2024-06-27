@@ -22,7 +22,7 @@ const LoginFormAttendee = () => {
       if (res.data.status === "success") {
         const token = res.data.token;
         const role = res.data.role;
-        const userEmail = res.data.userEmail
+        const userEmail = values.email
         localStorage.setItem("jsonwebtoken", token);
         localStorage.setItem("role", role);
         localStorage.setItem("userEmail", userEmail);
@@ -30,7 +30,7 @@ const LoginFormAttendee = () => {
 
       setTimeout(() => {
         isLoading(false);
-        navigate("/chat");
+        navigate("/attendee-dashboard");
       }, 2000);
     } catch (err) {
       isLoading(false);
