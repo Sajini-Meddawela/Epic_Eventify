@@ -30,7 +30,7 @@ const Home = () => {
           <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-black/60 bg-fixed">
             <div className="flex h-full items-center justify-center">
               <div className="px-6  text-center text-white md:px-48">
-                <h1 className="mb-6 text-5xl font-bold uppercase">
+                <h1 className="mb-20 text-5xl font-bold uppercase">
                   Welcome to epiceventify
                 </h1>
                 <h3 className="mb-8 text-xl">
@@ -47,7 +47,7 @@ const Home = () => {
                   Join us today - click & explore, and create lasting memories
                   with EpicEventify!
                 </h3>
-                <div className=" flex flex-col md:justify-evenly whitespace-nowrap md:flex-row  gap-10 pt-14 ">
+                <div className=" flex flex-col md:justify-evenly whitespace-nowrap md:flex-row gap-10 pt-14 ">
                   <Link to={"/event-display"}>
                     <button
                       type="button"

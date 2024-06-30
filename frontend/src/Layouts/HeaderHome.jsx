@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 
 const HeaderHome = () => {
   const [isAuthenticate, setAuthenticate] = useState(false);
+
   useEffect(() => {
     const checkLocal = () => {
       if (localStorage.getItem("jsonwebtoken")) {
@@ -19,7 +20,7 @@ const HeaderHome = () => {
       }
     };
     checkLocal();
-  });
+  }, []);
 
   const logout = async () => {
     try {
@@ -38,7 +39,6 @@ const HeaderHome = () => {
       }, 2000);
     } catch (error) {
       console.error("Logout failed:", error);
-      // Show error message
       Swal.fire({
         icon: "error",
         title: "Logout Failed",
@@ -46,28 +46,36 @@ const HeaderHome = () => {
       });
     }
   };
+
   return (
     <div>
-      <nav
-        className="relative flex w-full items-center justify-between bg-[#562595] shadow-dark-mild dark:bg-body-dark lg:flex-wrap lg:justify-start lg:py-4"
-        data-twe-navbar-ref
-      >
-        <div className="flex w-full flex-wrap items-center justify-between  px-3">
+      <nav className="relative flex w-full items-center justify-between bg-[#562595] shadow-dark-mild dark:bg-body-dark lg:flex-wrap lg:justify-start lg:py-2">
+        <div className="flex w-full flex-wrap items-center justify-between px-5">
           <div>
-            <Link to={"/"}>
-              <img src={logo} alt="" className="max-h-[70px] ml-5" />
+            <Link to="/">
+              <img src={logo} alt="Logo" className="max-h-[50px] ml-5" />
             </Link>
           </div>
           {isAuthenticate ? (
             <div className="text-white flex justify-end ml-auto mr-5">
-              <button onClick={logout}>Logout</button>
+              <button onClick={logout} className="bg-[#562595] text-white py-2 px-4 rounded">
+                Logout
+              </button>
             </div>
           ) : (
-            <div className="bg-white flex justify-evenly w-1/4">
-              <FacebookFilled className="text-[#562595] text-5xl p-2" />
-              <InstagramFilled className="text-[#562595] text-5xl p-2" />
-              <TwitterSquareFilled className="text-[#562595] text-5xl p-2" />
-              <YoutubeFilled className="text-[#562595] text-5xl p-2" />
+            <div className="flex justify-evenly w-1/5">
+              <Link to="https://www.facebook.com/profile.php?id=61561565581190&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
+                <FacebookFilled className="text-[#fff] text-4xl p-2" />
+              </Link>
+              <Link to="https://www.instagram.com/epiceventify/" target="_blank" rel="noopener noreferrer">
+                <InstagramFilled className="text-[#fff] text-4xl p-2" />
+              </Link>
+              <Link to="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+                <TwitterSquareFilled className="text-[#fff] text-4xl p-2" />
+              </Link>
+              <Link to="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+                <YoutubeFilled className="text-[#fff] text-4xl p-2" />
+              </Link>
             </div>
           )}
         </div>
