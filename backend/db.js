@@ -6,6 +6,6 @@ const connectionPool = mysql.createPool({
   password: "567Local:8032",
   database: "entertainmentdb",
 });
-console.log(`DB connecting...`);
+console.log(`EpicEventify!`);
 
 module.exports = connectionPool;

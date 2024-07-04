@@ -178,7 +178,7 @@ const loginUser = async (email, password, type, organizerId) => {
       }
        return createSendToken(user);
     } else {
-      const error = new Error("Unauthorized");
+      const error = new Error("Incorrect Password");
       error.statusCode = 401;
       throw error;
     }

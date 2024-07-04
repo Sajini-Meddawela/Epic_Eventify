@@ -78,7 +78,6 @@ const restrictTo = (...roles) => {
   return (req, res, next) => {
     const token = req.headers.authorization;
     const decoded = decode(token);
-    console.log(decoded);
     if (!roles.includes(decoded.role)) {
       throw new Error("You don't have permission for this action!");
     }

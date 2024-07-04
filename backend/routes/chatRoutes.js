@@ -6,6 +6,6 @@ const router = express.Router();
 
 module.exports = (io) => {
   router.get('/', protect, restrictTo('Attendee', 'Organizer'), getChats(io));
-  router.post('/', protect, restrictTo('Attendee', 'Organizer'), createChat(io));
+  router.post('/', protect, restrictTo('Organizer'), createChat(io));
   return router;
 };

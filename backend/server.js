@@ -37,7 +37,7 @@ const connectDb = require("./db");
 const startServer = async () => {
   try {
     await connectDb.query("SELECT 1");
-    console.log("DB Connected");
+    console.log("Connected to DB");
 
     server.listen(port, () => {
       console.log(`Server running on port ${port}`);
